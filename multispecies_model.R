@@ -1,28 +1,18 @@
-# =========================================================
-# Multi-Species Analytical Mutualistic Model
-# Translating Eq 20 to 148 fully vectorized over S_P and S_A
-# =========================================================
-
 # --- 1. Define Example Vectors for Multiple Species ---
-
-# --- 1. Define Example Vectors for Multiple Species ---
-
-mu_P <- c(1:10) # Corollas of varied lengths
+mu_P <- c(1:15) # Corollas of varied lengths
 S_P <- length(mu_P) # Number of Plant Species
 
-# We use rep() so all vectors automatically match the amount of plant species
-P_t <- rep(100, S_P)       
-sigma_P <- rep(1, S_P)     
-r_P <- rep(0.1, S_P)       
-m_P <- rep(0.01, S_P)      
-b_P <- rep(1.5, S_P)       
-M_P0 <- rep(10, S_P)       
-c_cost <- 0.1             
+P_t <- rep(100, S_P)
+sigma_P <- rep(1, S_P)
+r_P <- rep(0.1, S_P)
+m_P <- rep(0.01, S_P)
+b_P <- rep(1.5, S_P)
+M_P0 <- rep(10, S_P)
+c_cost <- 0.1
 
-mu_A <- c(1:10) # Proboscises of varied lengths
+mu_A <- c(1:20) # Proboscises of varied lengths
 S_A <- length(mu_A) # Number of Animal Species
 
-# Automatically scale vectors to match the amount of animal species
 A_t <- rep(50, S_A)
 sigma_A <- rep(1.2, S_A)
 b_A <- rep(2.0, S_A)
@@ -52,16 +42,14 @@ f_int <- part1 + part2
 
 
 # --- 3. Compute Plant Fitness ---
-# Plant Costs (Eq 35, 41)
 # Denom_H calculates the competitive sum over all plants available to animal j
-denom_H <- as.vector(H_int %*% P_t) + 1e-9 # Length S_A
+denom_H <- as.vector(H_int %*% P_t) + 1e-9
 
 # M^C_A Matrix (S_A x S_P): sweeping along rows (MARGIN=1) for animal-specific denominators
 M_C_A <- sweep(H_int, 1, denom_H, "/")
 M_C_A <- sweep(M_C_A, 1, A_t, "*")
 C_P_val <- c_cost * colSums(M_C_A) # Summing all animal j interactions for each plant i
 
-# Plant Benefits (Eq 86, 92)
 # Denom_f calculates competitive sum over all plants accessible to animal j
 denom_f <- as.vector(t(f_int) %*% P_t) + 1e-9 # Length S_A
 
@@ -77,7 +65,6 @@ W_P <- exp(r_P + B_P_val - C_P_val - m_P * P_t)
 
 
 # --- 4. Compute Animal Fitness ---
-# Animal Benefits (Eq 60, 66)
 denom_H_anim <- as.vector(t(H_int) %*% A_t) + 1e-9 # Length S_P, competition amongst animals for plant i
 
 # M_A Matrix (S_A x S_P): sweeping along cols (MARGIN=2) for plant-specific denominators
@@ -87,7 +74,7 @@ M_A_total <- rowSums(M_A_matrix)
 
 B_A_val <- b_A * (M_A_total / (M_A_total + M_A0))
 
-# Animal Costs (Eq 148)
+# Animal Costs
 C_A_val <- C_A0 * exp((mu_A / mu_A0) + 0.5 * (sigma_A / mu_A0)^2)
 
 # Resulting Animal Fitness (W_A)
