@@ -88,7 +88,7 @@ By substituting $M_i = \sum_{j} M_{i,j}$ upward into $B'(M)$ and $B''(M)$, we co
 
 
 \section{Alternative Approach: The Mean-Field Integration}
-Is it better to add more terms to the Taylor Expansion or Laplace formula? No. Adding more polynomial terms (3rd or 4th order, representing mathematical skewness and kurtosis matrices) actually actively degrades the approximation because discontinuous step functions intrinsically lack a stable Taylor radius of convergence.
+Adding more polynomial terms (3rd or 4th order, representing mathematical skewness and kurtosis matrices) actually actively degrades the approximation because discontinuous step functions intrinsically lack a stable Taylor radius of convergence.
 
 Instead, a geometrically stable alternative can be constructed via the \textbf{Mean-Field Cumulant Expansion}. Rather than enveloping the entire exponential function in a multivariate outer integral, we legally pull the Expected Value integrals \textit{inside} the exponential prior to algebraic distribution:
 $$ \langle W_P \rangle \approx \exp\left( r_P - m_P P_t + \langle B_P \rangle - \langle C_P \rangle \right) $$
